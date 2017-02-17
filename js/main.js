@@ -1,18 +1,27 @@
 (function() {
-  var map, marker;
+  var map = new google.maps.Map(document.querySelector('.map-wrapper')), marker;
 
-  function initMap(){
-    map = new google.maps.Map(document.querySelector('.map-wrapper'), {
-      center : { lat: 42.983233, lng: -81.250688 },
-      zoom : 14
-    }); //google object, inside of that a map object then a class, tells amp to center on this location and zoom to 14
+  function initMap(position){
+    map.setCenter({ lat: position.coords.latitude, lng: position.coords.longitude });
+      map.setZoom(14);
 
-    marker = new google.maps.Marker({
-      position: { lat: 42.983233, lng: -81.250688 },
+      marker = new google.maps.Marker({
+      position: { lat: position.coords.latitude, lng: position.coords.longitude },
       map: map,
       title: "hello"
+
     });
   }
-initMap();
+
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(initMap, handleError); // success and error callback
+}else {
+    console.log('we were on a break!');
+  }
+}
+
+function handleError(){
+  console.log('something went wrong');
+}
 
 })();
